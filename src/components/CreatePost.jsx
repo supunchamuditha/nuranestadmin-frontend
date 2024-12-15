@@ -6,7 +6,7 @@ const CreatePost = () => {
     return (
       <div className="p-6 bg-white rounded-lg shadow-md flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold mb-2">CREATE NEW POST</h2>
+          <h2 className="text-2xl font-semibold mb-2">CREATE NEW ARTICLE</h2>
           <p className="text-sm text-gray-600">
             Create new post in WordPress site for the Flutter app
           </p>

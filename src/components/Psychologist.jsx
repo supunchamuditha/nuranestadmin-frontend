@@ -93,16 +93,37 @@ const Psychologists = ({ onSelect }) => {
   ];
 
   const [visibleCount, setVisibleCount] = useState(4);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter psychologists based on the search query
+  const filteredPsychologists = psychologists.filter((psychologist) =>
+    [
+      psychologist.name.toLowerCase(),
+      psychologist.email.toLowerCase(),
+      psychologist.specialization.toLowerCase(),
+    ].some((field) => field.includes(searchQuery.toLowerCase()))
+  );
 
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);
   };
 
   return (
-    <div className="p-8  bg-white rounded-lg shadow-md">
-      <h3 className="text-2xl font-medium mb-8">Psychologists</h3>
+    <div className="p-8 bg-white rounded-lg shadow-md">
+      <h3 className="text-2xl font-medium mb-4">Psychologists</h3>
+
+      {/* Search Bar */}
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search by name, email, or specialization"
+        className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200"
+      />
+
+      {/* Psychologists List */}
       <div className="grid grid-cols-2 gap-4">
-        {psychologists.slice(0, visibleCount).map((doc, index) => (
+        {filteredPsychologists.slice(0, visibleCount).map((doc, index) => (
           <div
             key={index}
             onClick={() => onSelect(doc)}
@@ -116,7 +137,9 @@ const Psychologists = ({ onSelect }) => {
           </div>
         ))}
       </div>
-      {visibleCount < psychologists.length && (
+
+      {/* Load More Button */}
+      {visibleCount < filteredPsychologists.length && (
         <div className="flex justify-center mt-4">
           <button
             onClick={loadMore}
@@ -129,5 +152,5 @@ const Psychologists = ({ onSelect }) => {
     </div>
   );
 };
-export default Psychologists;
 
+export default Psychologists;
