@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Header = () => {
     return (
       <div className="flex justify-between p-4 bg-white shadow-md">
@@ -8,9 +10,11 @@ const Header = () => {
             placeholder="Search"
             className="px-4 py-2 border rounded-md focus:outline-none"
           />
+          <Link to="/">
           <button className="p-2 rounded-md hover:bg-gray-100">
             Log Out
           </button>
+          </Link>
         </div>
       </div>
     );
