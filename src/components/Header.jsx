@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <div className="flex justify-between p-4 bg-white shadow-md relative">
-      <Link to="/">
+      <Link to="/home">
       <h1 className="text-2xl font-semibold">NuraNest</h1>
       </Link>
       <div className="flex items-center gap-4">
