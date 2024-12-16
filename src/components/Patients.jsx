@@ -42,6 +42,16 @@ const Patients = ({ onSelect }) => {
       birthday: "10/11/1987",
       gender: "Male",
     },
+    {
+      username: "liam_brown",
+      firstname: "Liam",
+      lastname: "Brown",
+      address: "56 Park Rd, Galle",
+      email: "liam.brown@example.com",
+      phone: "0765432109",
+      birthday: "10/11/1987",
+      gender: "Male",
+    },
   ];
 
   const [visibleCount, setVisibleCount] = useState(4);

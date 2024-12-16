@@ -24,29 +24,21 @@ function Home() {
         {/* Left Side */}
         <div className="space-y-6">
           <OverviewCrads />
-          <AppointmentsCard/>
-
-          {/* Create Post */}
-          <CreatePost />
           <div>
-
           {/* Patients List */}
           <Patients onSelect={setSelectedPatient} />
           {/* Patient Details */}
           {selectedPatient && <PatientCard data={selectedPatient} />}
-
           </div>
-
-          
         </div>
-
-
         {/* Right Side */}
         <div className="space-y-6">
+        <AppointmentsCard/>
+        {/* Create Post */}
+        <CreatePost />
         <div>
           {/* Pending Psychologists */}
           <Psychologists onSelect={setSelectedPsychologist} />
-
           {/* Psychologist Details */}
           {selectedPsychologist && <PsychologistCard data={selectedPsychologist} />}
           </div>
@@ -55,7 +47,6 @@ function Home() {
             <PaymentHistory />
             <Notifications />
           </div>
-          
         </div>
       </div>
     </div>
