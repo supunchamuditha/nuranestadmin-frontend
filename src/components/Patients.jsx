@@ -1,74 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Patients = ({ onSelect }) => {
-  const patients = [
-    {
-      username: "john_doe",
-      firstname: "John",
-      lastname: "Doe",
-      address: "123 Main St, Colombo",
-      email: "john.doe@example.com",
-      phone: "0711234567",
-      birthday: "15/08/1990",
-      gender: "Male",
-    },
-    {
-      username: "jane_smith",
-      firstname: "Jane",
-      lastname: "Smith",
-      address: "456 Elm St, Kandy",
-      email: "jane.smith@example.com",
-      phone: "0722345678",
-      birthday: "25/03/1985",
-      gender: "Female",
-    },
-    {
-      username: "emma_lee",
-      firstname: "Emma",
-      lastname: "Lee",
-      address: "78 Maple Ave, Nugegoda",
-      email: "emma.lee@example.com",
-      phone: "0709876543",
-      birthday: "12/06/1992",
-      gender: "Female",
-    },
-    {
-      username: "liam_brown",
-      firstname: "Liam",
-      lastname: "Brown",
-      address: "56 Park Rd, Galle",
-      email: "liam.brown@example.com",
-      phone: "0765432109",
-      birthday: "10/11/1987",
-      gender: "Male",
-    },
-    {
-      username: "liam_brown",
-      firstname: "Liam",
-      lastname: "Brown",
-      address: "56 Park Rd, Galle",
-      email: "liam.brown@example.com",
-      phone: "0765432109",
-      birthday: "10/11/1987",
-      gender: "Male",
-    },
-  ];
-
+  const [patients, setPatients] = useState([]); // State to store patients data
   const [visibleCount, setVisibleCount] = useState(4);
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(""); // Error state
+
+  // Fetch patients from the backend when the component mounts
+  useEffect(() => {
+    const fetchPatients = async () => {
+      const token = localStorage.getItem("token"); // Get the token from localStorage
+
+      if (!token) {
+        setError("Please log in first");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:8000/users/role/patient", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token to the Authorization header
+          },
+        });
+        console.log("API Response:", response.data); // Debug the response structure
+        setPatients(response.data?.users || []); // Correctly access 'users' instead of 'patients'
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching patients:", err);
+        setError("Failed to load patients");
+        setLoading(false); // Stop loading on error
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   // Filter patients based on the search query
-  const filteredPatients = patients.filter((patient) =>
-    [
-      `${patient.firstname} ${patient.lastname}`.toLowerCase(),
-      patient.email.toLowerCase(),
-      patient.address.toLowerCase(),
-    ].some((field) => field.includes(searchQuery.toLowerCase()))
-  );
+  const filteredPatients = Array.isArray(patients)
+    ? patients.filter((patient) =>
+        [
+          `${patient.firstName || ""} ${patient.lastName || ""}`.toLowerCase(),
+          (patient.email || "").toLowerCase(),
+          (patient.address || "").toLowerCase(),
+        ].some((field) => field.includes(searchQuery.toLowerCase()))
+      )
+    : [];
 
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);
   };
+
+  // Display loading or error message
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="p-8 bg-white rounded-lg shadow-md">
@@ -93,8 +85,8 @@ const Patients = ({ onSelect }) => {
           >
             <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
             <div>
-              <h4 className="font-medium">{`${patient.firstname} ${patient.lastname}`}</h4>
-              <p className="text-sm text-gray-500">{patient.email}</p>
+              <h4 className="font-medium">{`${patient.firstName || ""} ${patient.lastName || ""}`}</h4>
+              <p className="text-sm text-gray-500">{patient.email || "No email available"}</p>
             </div>
           </div>
         ))}
